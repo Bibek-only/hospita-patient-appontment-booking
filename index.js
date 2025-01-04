@@ -78,7 +78,7 @@ app.post("/book-appointment", async (req, res) => {
         }
     } catch (error) {
         console.log(error)
-        console.log("error in appointment creation");
+        console.log("error in appointment creation"); 
         return res.json({
             msg: "appintment fail",
             success: false
@@ -89,17 +89,23 @@ app.post("/book-appointment", async (req, res) => {
 });
 
 //get the appoint ment details
-app.post("/get-details",async (req,res)=>{
-    const body = req.body;
-    const {patientName, patientNumber} = body;
-    console.log(body);
+app.get("/get-appointments",async (req,res)=>{
+ const number = req.query.number;
+ 
+  if(!number){
+    return res.json({
+      success: false,
+      msg: "can't find number",
+      data: []
+    })
+  }
+    
     try {
 
-        const getAppointmentRes = await Patient.findOne({
-            patientName,
-            patientNumber
+        const getAppointmentRes = await Patient.find({
+            patientNumber:number
         })
-
+        
         if(getAppointmentRes){
             return res.json({
               msg: "Get the appointment details",
